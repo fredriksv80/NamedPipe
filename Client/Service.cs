@@ -14,26 +14,16 @@ namespace Client
 {
 	public class Service : IService
 	{
-		private NamedPipeClientStream pipeClient;
-		public Service()
-		{
-			
-			//var str = StreamHelper.ReadString(pipeClient);
-
-			//Console.Write(str);
-
-			//pipeClient.Close();
-			//// Give the client process some time to display results before exiting.
-			//Thread.Sleep(4000);
-		}
 		public IData GetData()
 		{
-			pipeClient = new NamedPipeClientStream(".", "testpipe", PipeDirection.InOut, PipeOptions.None, TokenImpersonationLevel.Impersonation);
+			NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "testpipe", PipeDirection.InOut, PipeOptions.None, TokenImpersonationLevel.Impersonation);
 
 			Console.WriteLine("Connecting to server...\n");
 			pipeClient.Connect();
 
-			StreamHelper.WriteString("GetData", pipeClient);
+			var p = new Protocol(){ MethodName = "GetData" };
+			
+			StreamHelper.WriteString(JsonConvert.SerializeObject(p), pipeClient);
 			string json =  StreamHelper.ReadString(pipeClient);
 			pipeClient.Close();
 

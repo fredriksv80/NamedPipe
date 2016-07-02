@@ -78,15 +78,22 @@ namespace Server
 			try
 			{
 				string json="";
-				string function = StreamHelper.ReadString(pipeServer);
+				var function = JsonConvert.DeserializeObject<Protocol>(StreamHelper.ReadString(pipeServer));
 
-				switch (function)
+				switch (function.MethodName)
 				{
 					case "GetData":
 
 						IData data = services.GetData();
 						data.Time = DateTime.Now; //Vill se att det sker senare
 						json = JsonConvert.SerializeObject(data);
+
+						break;
+					case "GetOne":
+
+						//IData data = services.GetData();
+						//data.Time = DateTime.Now; //Vill se att det sker senare
+						//json = JsonConvert.SerializeObject(data);
 
 						break;
 					default:
