@@ -9,5 +9,6 @@ namespace Common.Interface
 	public interface IService
 	{
 		IData GetData();
+		IData GetDataByNumber();
 	}
 }
